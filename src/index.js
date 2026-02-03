@@ -9,7 +9,7 @@ import { json, urlencoded } from 'express';
 // import Crypto from 'crypto';
 // import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-// import fileUpload from 'express-fileupload';
+import fileUpload from 'express-fileupload';
 // import {v2 as cloudinary} from 'cloudinary';
 import path from 'path';
 import { fileURLToPath } from 'url';
