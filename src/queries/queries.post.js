@@ -7,7 +7,7 @@ export default {
     OFFSET $3
     LIMIT $4
     ` ,
-    fetchPosts:`SELECT COUNT(id) FROM blogposts WHERE is_published=$1 AND status=$2`,
+    fetchPostsCounts:`SELECT COUNT(id) FROM blog_posts WHERE is_published=$1 AND status=$2`,
     postExists: `SELECT id, title, content, status FROM blog_posts WHERE id = $1`,
     postComment: `
         INSERT INTO blog_post_comments (post_id, user_id, comment) 
