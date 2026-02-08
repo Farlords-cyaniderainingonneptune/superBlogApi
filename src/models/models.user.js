@@ -19,3 +19,22 @@ export const expressFileUpload= async(data)=>{
     return mediaUpload;
 
 }
+export const multipleUpload= async(data)=>{
+      const { userId, 
+        file_url, 
+        usedBy,
+        type,
+        mimeType, 
+        size, 
+        cloudinaryId }=data
+
+    const mediaUpload= await db.many(queries.uploadFile,[userId, 
+        file_url, 
+        usedBy,
+        type, 
+        mimeType, 
+        size, 
+        cloudinaryId])
+    return mediaUpload;
+
+}

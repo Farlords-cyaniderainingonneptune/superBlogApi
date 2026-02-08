@@ -3,10 +3,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from '../config/cloudinary/index.js';
 import * as userModel from '../models/models.user.js';
+ 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const expressFileUploadSingleFile = async (req, res) => {
+    
     let localFilePath = '';
 const {files}= req;
 
@@ -66,8 +68,7 @@ const {files}= req;
         };
 
         const savedMedia = await userModel.expressFileUpload(dbPayload);
-if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath)
-       
+if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath)   
         ;
 
         return res.status(201).json({
@@ -87,6 +88,8 @@ if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath)
         });
     }
 };
+
+
 
 // import fs from 'fs';
 // import path from 'path';
@@ -201,27 +204,59 @@ if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath)
 
 // uploading single file with multer to cloudinary upload file from disk storage
 export const multerFileUploadSingleFile = async(req, res) => {
-    const { file } = req;
+     const { file } = req;
     console.log('file====>>>', file);
+    try{
+    const userId= req.user.user_id;
+    const usedBy = req.query.usedBy 
 
+    if (!req.file) {
+    return res.status(400).json({ status:'error', message: "Please upload an image" });
+    }
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.mimetype)) {
+        return res.status(400).json({ message: "Invalid file format. Only JPEG, PNG, and WebP are allowed." });
+    }
+    if(!usedBy){
+        return res.status(400).json({
+            status:'error',
+            message:'Please specify the use of the image'
+        })
+    }
     // upload to cloudinary cloud server
-    await cloudinary.uploader.upload(file.path, {
+    const cloudResult= await cloudinary.uploader.upload(file.path, {
         overwrite: true,
         resource_type: "auto",
         folder: 'backendCohortOne/multer-uploads',
-    }).then((result) => {
-        // delete file from server after upload
-        fs.unlinkSync(file.path);
+    })
 
         // save url to DB
+        const dbPayload = {
+            userId,
+            file_url: cloudResult.secure_url,
+            usedBy: usedBy,
+            type: file.mimetype.split('/')[0], 
+            mimeType: file.mimetype,
+            size: file.size,
+            cloudinaryId: cloudResult.public_id
+        };
 
-        // return secure_url to user
+    const savedMedia = await userModel.expressFileUpload(dbPayload)
+    if (fs.existsSync(file.path)) fs.unlinkSync(file.path) 
+        if (!savedMedia){
+            return res.status(400).json({
+                status:'error',
+                message:`unable to save ${type} file` 
+            });
+        }
         return res.status(200).json({
             status: 'success',
             message: 'Files uploaded successfully',
-            data: { media_url: result.secure_url }
+            data: savedMedia,
+           
         });
-    }).catch((error) => {
+    
+    }catch(error) {
         console.log('error====>>>', error);
         // delete file from server after upload
         fs.unlinkSync(file.path);
@@ -231,51 +266,126 @@ export const multerFileUploadSingleFile = async(req, res) => {
             status: 'fail',
             message: error.message || 'File upload failed',
         });
-    });
+    };
 };
 
 // uploading multiple files with multer to cloudinary upload file from disk storage
 export const multerFileUploadMultipleFiles = async(req, res) => {
+    
     const { files } = req;
     console.log('files====>>>', files);
+//     for (const file of files) {
+//        const cloudResult= await cloudinary.uploader.upload(file.path, {
+//         overwrite: true,
+//         resource_type: "auto",
+//         folder: 'backendCohortOne/multer-bulk-uploads',
+//     })
+//          const dbPayload = {
+//             userId: req.user.user_id,
+//             file_url: cloudResult.secure_url,
+//             usedBy,
+//             type: file.mimetype.split('/')[0], 
+//             mimeType: file.mimetype,
+//             size: file.size,
+//             cloudinaryId: cloudResult.public_id
+//         };
 
-    // upload to cloudinary cloud server
-    const uploadedFileUrls = [];
-    for (const file of files) {
-        await cloudinary.uploader.upload(file.path, {
-        overwrite: true,
-        resource_type: "auto",
-        folder: 'backendCohortOne/multer-bulk-uploads',
-    }).then((result) => {
-        uploadedFileUrls.push(result.secure_url);
+//         const savedMedia = await userModel.multipleUpload(dbPayload)
 
-        // delete file from server after upload
-        fs.unlinkSync(file.path);
+//         uploadedFileUrls.push(savedMedia);
+        
+//         // delete file from server after upload
+//         fs.unlinkSync(file.path);
+//     }
 
-        return;
-    }).catch((error) => {
-        console.log('error====>>>', error);
-        // delete file from server after upload
-        fs.unlinkSync(file.path);
+    
+// 
+//   await Promise.all(uploadedFileUrls);
+//     if (uploadedFileUrls.length > 0) {
+//         return res.status(200).json({
+//             status: 'success',
+//             message: 'Files uploaded successfully',
+//             data: savedMedia
+//         });
+//     }
+//     return res.status(500).json({
+//         status: 'fail',
+//         message: 'Files upload failed',
+//     });
+// }catch(error){
+//         console.log('error====>>>', error);
+//         // delete file from server after upload
+//         fs.unlinkSync(file.path);
 
-        return error;
-    });
-    }
-    await Promise.all(uploadedFileUrls);
-
-
-    if (uploadedFileUrls.length > 0) {
-        return res.status(200).json({
-            status: 'success',
-            message: 'Files uploaded successfully',
-            data: { media_urls: uploadedFileUrls }
+//         return error;
+//     };
+  // Check if files exist before processing
+    if (!files || files.length === 0) {
+        return res.status(400).json({ 
+            status: 'fail', 
+            message: 'No files uploaded. Please attach media files.' 
         });
     }
-    return res.status(500).json({
-        status: 'fail',
-        message: 'Files upload failed',
-    });
-};
+
+    try {
+        const userId = req.user.user_id;
+        const usedBy = req.query.usedBy || 'posts'; // Fallback if query is missing
+
+        const uploadTasks = files.map(async (file) => {
+            
+            // Task A: Upload to Cloudinary
+            const cloudResult = await cloudinary.uploader.upload(file.path, {
+                overwrite: true,
+                resource_type: "auto",
+                folder: 'backendCohortOne/multer-bulk-uploads',
+            });
+
+            // Task B: Prepare Payload for DB (using correct Multer properties)
+            const dbPayload = {
+                userId,
+                file_url: cloudResult.secure_url,
+                usedBy,
+                type: file.mimetype.split('/')[0],
+                mimeType: file.mimetype,
+                size: file.size,
+                cloudinaryId: cloudResult.public_id
+            };
+
+           
+            const savedMedia = await userModel.multipleUpload(dbPayload);
+            if (fs.existsSync(file.path)) {
+                fs.unlinkSync(file.path);
+            }
+
+            // This result goes into the final 'results' array
+            return savedMedia;
+        });
+
+        // 3. Wait for every single task to cross the finish line
+        const results = await Promise.all(uploadTasks);
+
+        // 4. Send the final response
+        return res.status(200).json({
+            status: 'success',
+            message: `${results.length} files uploaded successfully`,
+            data: { media_items: results }
+        });
+
+    } catch (error) {
+        console.error('Bulk Upload Error:', error);
+        files.forEach(file => {
+            if (fs.existsSync(file.path)) {
+                fs.unlinkSync(file.path);
+            }
+        });
+
+        return res.status(500).json({
+            status: 'fail',
+            message: error.message || 'Multiple file upload failed',
+        });
+    }
+}; 
+
 
 // uploading single file with multer to cloudinary upload file from memory storage
 export const multerFileUploadMemorySingleFile = async(req, res) => {

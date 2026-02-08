@@ -15,8 +15,9 @@ const upload = multer({ storage });
 const memoryStorage = multer.memoryStorage()
 const memoryUpload = multer({ storage: memoryStorage });
 
-router.post('/upload/multer/single', 
+router.post('/upload/multer/single',
     authMiddleware.verifyToken,
+    
     upload.single('media'),
     userController.multerFileUploadSingleFile
 );
