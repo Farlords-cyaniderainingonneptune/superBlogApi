@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from '../config/cloudinary/index.js';
 import * as userModel from '../models/models.user.js';
+import * as Helpers from '../utils/utils.helpers.js'
  
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -427,3 +428,25 @@ export const multerFileUploadMemorySingleFile = async(req, res) => {
         });
     }
 };
+//get file uploads
+export const fetchMediaFile = async(req,res) => {
+   try{
+    const userId= req.user.user_id;
+    const mediaFile =  await userModel.fetchMediaFile(userId);
+    if(!mediaFile){
+        return res.status(400).json({
+            status:'error',
+            message:'unable to retrieve file'
+        })
+    } return res.status(200).json({
+        status:'success',
+        data:mediaFile
+    });
+   }catch(error) {
+        console.log('error====>>>', error);
+        return res.status(500).json({
+            status: 'fail',
+            message: error.message || 'File upload failed',
+        });
+    }
+}

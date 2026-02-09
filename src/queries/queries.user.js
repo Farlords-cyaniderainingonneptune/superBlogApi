@@ -11,5 +11,14 @@ export default{
         ) 
         VALUES ($1, $2, $3, $4, $5, $6, $7) 
         RETURNING *;
-    `
+    `,
+    fetchFilebyUser:`
+        SELECT file_url, type, size from media_uploads WHERE uploaded_by= $1
+    `,
+    fetchFilebyType:`
+        SELECT file_url, type, size, mime_type from media_uploads WHERE uploaded_by= $1
+    `,
+    deleteFile:`
+        DELETE FROM media_uploads WHERE uploaded_by= $1 AND is_deleted= 'false'
+    `,
 }

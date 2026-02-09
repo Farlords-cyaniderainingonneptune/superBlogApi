@@ -17,7 +17,7 @@ const memoryUpload = multer({ storage: memoryStorage });
 
 router.post('/upload/multer/single',
     authMiddleware.verifyToken,
-    
+
     upload.single('media'),
     userController.multerFileUploadSingleFile
 );
@@ -31,7 +31,10 @@ router.post('/upload/multer/memory-single',
     memoryUpload.single('media'),
     userController.multerFileUploadMemorySingleFile
 );
+ router.get('/fetchFile',
+    authMiddleware.verifyToken,
+    userController.fetchMediaFile
+ )
 
 export default router;
-
 
