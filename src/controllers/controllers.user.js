@@ -432,21 +432,42 @@ export const multerFileUploadMemorySingleFile = async(req, res) => {
 export const fetchMediaFile = async(req,res) => {
    try{
     const userId= req.user.user_id;
-    const mediaFile =  await userModel.fetchMediaFile(userId);
+    const {query}= req;
+    if(parseInt(query.per_page)> 100){
+        return res.status(422).json({
+        status: 'error',
+        code: 422,
+        message: 'Unprocessable entity, kindly check your per_page'
+    });
+};
+   const { offset, limit } = Helpers.paginationOffsetLimit(query);
+    
+    const mediaFile =  await userModel.fetchMediaFile(userId, offset, limit);
+    const totalPosts = await userModel.fetchFileCounts(userId);
+    
+    const totalPostsCount = parseInt(totalPosts.count);
+    const totalPages = Helpers.paginationTotalPages(totalPostsCount, limit)
     if(!mediaFile){
         return res.status(400).json({
             status:'error',
             message:'unable to retrieve file'
         })
-    } return res.status(200).json({
+    } logger.info(`timestamp===>>>:::${new Date().toISOString()}, Info:Reassessing logger`)
+    logger.warn(`timestamp===>>>:::${new Date().toISOString()}, warning message`)
+    return res.status(200).json({
         status:'success',
-        data:mediaFile
+        data:{
+            page: parseInt(query.page) || 1,
+            total_count: totalPostsCount,
+            total_pages: parseInt(totalPages),
+            mediaFile,
+        }
     });
    }catch(error) {
         console.log('error====>>>', error);
         return res.status(500).json({
             status: 'fail',
-            message: error.message || 'File upload failed',
+            message: error.message || 'File cannot be retrieved',
         });
     }
 }

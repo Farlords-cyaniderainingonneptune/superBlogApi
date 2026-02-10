@@ -13,12 +13,19 @@ export default{
         RETURNING *;
     `,
     fetchFilebyUser:`
-        SELECT file_url, type, size from media_uploads WHERE uploaded_by= $1
+        SELECT id, uploaded_by, file_url, type, size from media_uploads WHERE uploaded_by= $1
+        ORDER BY created_at DESC
+        OFFSET $2
+        LIMIT $3
     `,
     fetchFilebyType:`
-        SELECT file_url, type, size, mime_type from media_uploads WHERE uploaded_by= $1
+        SELECT id, uploaded_by, file_url, type, size, mime_type from media_uploads WHERE type= $1
+        ORDER BY created_at DESC
+        OFFSET $2
+        LIMIT $3
     `,
     deleteFile:`
         DELETE FROM media_uploads WHERE uploaded_by= $1 AND is_deleted= 'false'
     `,
+     fetchFileCounts:`SELECT COUNT(id) FROM media_uploads WHERE uploaded_by=$1 AND is_deleted=$2`
 }

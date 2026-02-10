@@ -8,8 +8,8 @@ import { json, urlencoded } from 'express';
 // import bcrypt from 'bcryptjs';
 // import Crypto from 'crypto';
 // import jwt from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
-import fileUpload from 'express-fileupload';
+// import { v4 as uuidv4 } from 'uuid';
+// import fileUpload from 'express-fileupload';
 // import {v2 as cloudinary} from 'cloudinary';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -17,8 +17,36 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 // import {upload} from './multer.js';
 import routes from "./routes/index.js"
+import loggerInit from './config/logger/index.js'
 
 const app = express();
+let logger;
+
+  switch (app.get('env')) {
+  case 'development':
+    logger = loggerInit('development');
+    break;
+
+  case 'production':
+    logger = loggerInit('production');
+    break;
+
+  case 'test':
+    logger = loggerInit('test');
+    break;
+
+  default:
+    logger = loggerInit();
+  }
+
+  global.logger = logger;
+  
+logger.info
+(`${new Date().toISOString()} Application starting...`);
+  logger.debug('Overriding \'Express\' logger');
+  
+logger.info
+(`${new Date().toISOString()} Environment is ${process.env.NODE_ENV}`); 
 
 app.use(helmet());
 app.use(compression());

@@ -11,6 +11,7 @@ export const createAuthor= async(req, res)=>{
     const author_id = uuidv4();
     const {name, email, image_url, bio} = req.body;
         if (!name || !email){
+            logger.info(`timestamp===>>>:::${new Date().toISOString()}, Info:Reassessing logger`)
             return res.status(422).json({
             status: 'error',
             message: 'You need to put in name or email'

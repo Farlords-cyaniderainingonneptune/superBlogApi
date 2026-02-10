@@ -38,7 +38,17 @@ export const multipleUpload= async(data)=>{
     return mediaUpload;
 
 }
-export const fetchMediaFile= async(user_id)=>{
-    const mediaFile= await db.oneOrNone(queries.fetchFilebyUser,[user_id])
+export const fetchMediaFile= async(user_id, offset, limit)=>{
+    const mediaFile= await db.any(queries.fetchFilebyUser,[user_id, parseInt(offset), parseInt(limit)])
+    return mediaFile;
+}
+
+export const fetchByMediaType= async(user_id, type, offset, limit)=>{
+    const mediaFile= await db.any(queries.fetchFilebyUser,[user_id, type, parseInt(offset), parseInt(limit)])
+    return mediaFile;
+}
+
+export const fetchFileCounts = async (user_id) => {
+    const mediaFile = await db.oneOrNone(queries.fetchFileCounts, [user_id, false]);
     return mediaFile;
 }
