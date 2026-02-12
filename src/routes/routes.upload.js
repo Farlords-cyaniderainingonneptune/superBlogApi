@@ -35,6 +35,10 @@ router.post('/upload/multer/memory-single',
     authMiddleware.verifyToken,
     userController.fetchMediaFile
  )
+ router.get('/fetchFileByType',
+    authMiddleware.verifyToken,
+    userController.fetchMediaFileByType
+ )
 
 export default router;
 

@@ -16,9 +16,9 @@ router.post('/upload/express-upload',
     userController.expressFileUploadSingleFile
 );
 
-router.get('/fetch_upload',
-    authMiddleware.verifyToken,
+// router.get('/fetch_upload',
+//     authMiddleware.verifyToken,
 
-)
+// )
 
 export default router;

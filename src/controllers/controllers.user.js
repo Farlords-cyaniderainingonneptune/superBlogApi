@@ -22,24 +22,24 @@ const {files}= req;
         const usedBy = req.query.usedBy || 'posts'; // Default to 'posts'
         const userId= req.user.user_id
    
-    //     if (!files || Object.keys(files).length === 0) {
-    //     return res.status(400).send('No files were uploaded.');
-    // }
+        if (!files || Object.keys(files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
 
-    // const allowedFiles = [ 'image/jpg', 'image/png', 'image/jpeg', 'application/pdf', 'application/msword', 'video/mp4', 'audio/mpeg', 'text/csv']
-    // if (!allowedFiles.includes(files.media.mimetype)) {
-    //     return res.status(400).json({
-    //         status: 'error',
-    //         message: 'File type not allowed'
-    //     });
-    // }
+    const allowedFiles = [ 'image/jpg', 'image/png', 'image/jpeg', 'application/pdf', 'application/msword', 'video/mp4', 'audio/mpeg', 'text/csv']
+    if (!allowedFiles.includes(files.media.mimetype)) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'File type not allowed'
+        });
+    }
 
-    // if (files.media.mimetype.startsWith('image/') && files.media.size > 5242880) {
-    //     return res.status(400).json({
-    //         status: 'error',
-    //         message: 'Image size should not be more than 5MB'
-    //     });
-    // };
+    if (files.media.mimetype.startsWith('image/') && files.media.size > 5242880) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Image size should not be more than 5MB'
+        });
+    };
 
        const uploadPath = path.join(process.cwd(), 'mediaUpload');
         if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath);
@@ -59,7 +59,7 @@ const {files}= req;
 
        
         const dbPayload = {
-            userId: req.user.user_id,
+            userId,
             file_url: cloudResult.secure_url,
             usedBy: usedBy,
             type: sampleFile.mimetype.split('/')[0], 
@@ -444,6 +444,49 @@ export const fetchMediaFile = async(req,res) => {
     
     const mediaFile =  await userModel.fetchMediaFile(userId, offset, limit);
     const totalPosts = await userModel.fetchFileCounts(userId);
+    
+    const totalPostsCount = parseInt(totalPosts.count);
+    const totalPages = Helpers.paginationTotalPages(totalPostsCount, limit)
+    if(!mediaFile){
+        return res.status(400).json({
+            status:'error',
+            message:'unable to retrieve file'
+        })
+    } logger.info(`timestamp===>>>:::${new Date().toISOString()}, Info:Reassessing logger`)
+    logger.warn(`timestamp===>>>:::${new Date().toISOString()}, warning message`)
+    return res.status(200).json({
+        status:'success',
+        data:{
+            page: parseInt(query.page) || 1,
+            total_count: totalPostsCount,
+            total_pages: parseInt(totalPages),
+            mediaFile,
+        }
+    });
+   }catch(error) {
+        console.log('error====>>>', error);
+        return res.status(500).json({
+            status: 'fail',
+            message: error.message || 'File cannot be retrieved',
+        });
+    }
+}
+export const fetchMediaFileByType = async(req,res) => {
+   try{
+    const userId= req.user.user_id;
+    const {query}= req;
+    const {type}= req.body;
+    if(parseInt(query.per_page)> 100){
+        return res.status(422).json({
+        status: 'error',
+        code: 422,
+        message: 'Unprocessable entity, kindly check your per_page'
+    });
+};
+   const { offset, limit } = Helpers.paginationOffsetLimit(query);
+    
+    const mediaFile =  await userModel.fetchByMediaType(type, offset, limit);
+    const totalPosts = await userModel.fetchFileCountsType(type);
     
     const totalPostsCount = parseInt(totalPosts.count);
     const totalPages = Helpers.paginationTotalPages(totalPostsCount, limit)

@@ -27,5 +27,6 @@ export default{
     deleteFile:`
         DELETE FROM media_uploads WHERE uploaded_by= $1 AND is_deleted= 'false'
     `,
-     fetchFileCounts:`SELECT COUNT(id) FROM media_uploads WHERE uploaded_by=$1 AND is_deleted=$2`
+     fetchFileCounts:`SELECT COUNT(id) FROM media_uploads WHERE uploaded_by=$1 AND is_deleted=$2`,
+     fetchFileCountsType:`SELECT COUNT(id) FROM media_uploads WHERE type= $1 AND is_deleted=$2`
 }

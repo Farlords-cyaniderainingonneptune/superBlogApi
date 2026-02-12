@@ -43,12 +43,16 @@ export const fetchMediaFile= async(user_id, offset, limit)=>{
     return mediaFile;
 }
 
-export const fetchByMediaType= async(user_id, type, offset, limit)=>{
-    const mediaFile= await db.any(queries.fetchFilebyUser,[user_id, type, parseInt(offset), parseInt(limit)])
+export const fetchByMediaType= async(type, offset, limit)=>{
+    const mediaFile= await db.any(queries.fetchFilebyType,[type, parseInt(offset), parseInt(limit)])
     return mediaFile;
 }
 
 export const fetchFileCounts = async (user_id) => {
     const mediaFile = await db.oneOrNone(queries.fetchFileCounts, [user_id, false]);
+    return mediaFile;
+}
+export const fetchFileCountsType = async (type) => {
+    const mediaFile = await db.oneOrNone(queries.fetchFileCountsType, [type, false]);
     return mediaFile;
 }

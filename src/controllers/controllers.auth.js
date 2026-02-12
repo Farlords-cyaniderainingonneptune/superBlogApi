@@ -70,9 +70,9 @@ export const register = async (req, res) => {
     const verificationCodeDuration = 10; // in minutes
     const verificationCodeExpireAt = new Date(Date.now() + verificationCodeDuration * 60 * 1000);
 
-     // send verification email to users
-    // const Content =`Hello ${first_name}, kindly verify your account using this OTP: ${verificationCode}. This OTP will expire in ${verificationCodeDuration}`
-    // await sendMail(email,'Verify Your Account', Content);
+    //  send verification email to users
+    const Content =`Hello ${first_name}, kindly verify your account using this OTP: ${verificationCode}. This OTP will expire in ${verificationCodeDuration}`
+    await sendMail(email,'Verify Your Account', Content);
 
     // save to the DB
     const newUser = await authModel.createUser(req.body, hash, verificationCode, verificationCodeExpireAt);
@@ -139,8 +139,8 @@ export const verifyAccount = async (req, res) => {
     }
 
     // send welcome email to users 
-    // const Content =`Hello ${userDetails.first_name}. Welcome to BuilUp Bloggers. Your account has been verified.`
-    // await sendMail(email,'Account Verified', Content);
+    const Content =`Hello ${userDetails.first_name}. Welcome to BuilUp Bloggers. Your account has been verified.`
+    await sendMail(email,'Account Verified', Content);
 
     const verifiedUser = await authModel.updateUserVerification(email);
 
@@ -185,8 +185,8 @@ export const resendVerificationCode = async (req, res) => {
     const verificationCodeDuration = 10; // in minutes
     const verificationCodeExpireAt = new Date(Date.now() + verificationCodeDuration * 60 * 1000);
 
-    // const Content =`Hello ${userDetails.first_name}, kindly verify your account using this OTP: ${verificationCode}. This OTP will expire in ${verificationCodeDuration}.`
-    // await sendMail(email,'Verify Your Account', Content);
+    const Content =`Hello ${userDetails.first_name}, kindly verify your account using this OTP: ${verificationCode}. This OTP will expire in ${verificationCodeDuration}.`
+    await sendMail(email,'Verify Your Account', Content);
     
 
     const updatedUser = await authModel.updateUserVerificationCode(email, verificationCode, verificationCodeExpireAt);
