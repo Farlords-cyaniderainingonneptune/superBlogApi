@@ -18,6 +18,7 @@ import fs from 'fs';
 // import {upload} from './multer.js';
 import routes from "./routes/index.js"
 import loggerInit from './config/logger/index.js'
+import {rateLimiter} from './services/ratelimiter.js';
 
 const app = express();
 let logger;
@@ -53,6 +54,8 @@ app.use(compression());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(cors()); 
+app.use('/api/v1/auth/login', rateLimiter(5, 60));
+app.use('api/v1/auth/register', rateLimiter(2, 60));
 // app.use(fileUpload());
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -65,7 +68,7 @@ app.use(cors());
 //   max: 1000
 // };
 
-// // const db = pg(cn);
+// const db = pg(cn);
 // export const db = pg(cn);
 
 // cloudinary.config({ 

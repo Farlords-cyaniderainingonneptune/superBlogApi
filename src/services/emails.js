@@ -1,18 +1,9 @@
 import transporter from '../config/email/index.js';
+import redisClient from '../config/redis/index.js';
+// import {Worker} from 'bull';
 
-//  const { from, subject, message } = req.body;
+// const connection = new redisClient();
 
-//   // Constructing the message with the sender's email included
-//   const fullMessage = `Sender's Email: ${from}\nSubject: ${subject}\n\nMessage:\n${message}`;
-  
-//   console.log("full", fullMessage);
-
-//   const mailOptions = {
-//     from: from,
-//     to: "your-email@gmail.com",
-//     subject: subject,
-//     text: fullMessage,
-//   };
   const sendMail =(async (email, subject, Content) => {
   const emailInfo = await transporter.sendMail({
     from: {

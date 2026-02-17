@@ -2,6 +2,7 @@ import * as authModel from '../models/models.auth.js';
 import * as Hash from '../utils/utils.hash.js';
 import * as Helpers from '../utils/utils.helpers.js';
 import sendMail from '../services/emails.js';
+import {emailQueue} from '../config/redis/index.js';
 
 export const register = async (req, res) => {
     const { email, password, username, first_name, last_name } = req.body
@@ -71,9 +72,18 @@ export const register = async (req, res) => {
     const verificationCodeExpireAt = new Date(Date.now() + verificationCodeDuration * 60 * 1000);
 
     //  send verification email to users
-    const Content =`Hello ${first_name}, kindly verify your account using this OTP: ${verificationCode}. This OTP will expire in ${verificationCodeDuration}`
+    const Content =`Hello ${first_name}, kindly verify your account using this OTP: ${verificationCode}. This OTP will expire in ${verificationCodeDuration} mins`
     await sendMail(email,'Verify Your Account', Content);
+   await emailQueue.add({
+     to: email,
+     subject: 'Verify your account',
+     first_name,
+     verificationCode
+   },
+   {  delay: 36000  }
 
+  ); 
+ 
     // save to the DB
     const newUser = await authModel.createUser(req.body, hash, verificationCode, verificationCodeExpireAt);
 
@@ -223,7 +233,7 @@ export const login = async (req, res) => {
             code: 401,
             message: 'Invalid login credentials'
         })
-    }
+    };
 
     const userPasswordDetails = await authModel.userPassword(userExists.user_id);
     const validPassword = await Hash.compareData(password, userPasswordDetails.password);

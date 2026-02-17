@@ -70,3 +70,47 @@
 {"level":"info","message":"2026-02-12T09:58:34.100Z Environment is development"}
 {"level":"info","message":"timestamp===>>>:::2026-02-12T09:58:38.134Z, Info:Reassessing logger"}
 {"level":"warn","message":"timestamp===>>>:::2026-02-12T09:58:38.136Z, warning message"}
+{"level":"info","message":"2026-02-12T11:55:29.427Z Application starting..."}
+{"level":"info","message":"2026-02-12T11:55:29.430Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:04:58.774Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:04:58.777Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:11:48.702Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:11:48.705Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:15:41.994Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:15:41.996Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:27:05.857Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:27:05.860Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:31:07.143Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:31:07.146Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:37:22.246Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:37:22.250Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:38:17.943Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:38:17.946Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:55:35.313Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:55:35.317Z Environment is development"}
+{"level":"info","message":"2026-02-12T12:56:26.087Z Application starting..."}
+{"level":"info","message":"2026-02-12T12:56:26.092Z Environment is development"}
+{"level":"info","message":"2026-02-12T13:08:10.742Z Application starting..."}
+{"level":"info","message":"2026-02-12T13:08:10.749Z Environment is development"}
+{"level":"info","message":"2026-02-12T13:09:48.146Z Application starting..."}
+{"level":"info","message":"2026-02-12T13:09:48.151Z Environment is development"}
+{"level":"info","message":"2026-02-12T13:13:11.814Z Application starting..."}
+{"level":"info","message":"2026-02-12T13:13:11.819Z Environment is development"}
+{"level":"info","message":"2026-02-12T13:16:35.747Z Application starting..."}
+{"level":"info","message":"2026-02-12T13:16:35.751Z Environment is development"}
+{"level":"info","message":"2026-02-12T13:16:58.271Z Application starting..."}
+{"level":"info","message":"2026-02-12T13:16:58.276Z Environment is development"}
+{"level":"info","message":"2026-02-16T14:15:38.090Z Application starting..."}
+{"level":"info","message":"2026-02-16T14:15:38.100Z Environment is development"}
+{"level":"info","message":"2026-02-16T14:30:10.153Z Application starting..."}
+{"level":"info","message":"2026-02-16T14:30:10.157Z Environment is development"}
+{"level":"info","message":"2026-02-16T14:36:16.658Z Application starting..."}
+{"level":"info","message":"2026-02-16T14:36:16.663Z Environment is development"}
+{"level":"info","message":"2026-02-16T14:42:31.379Z Application starting..."}
+{"level":"info","message":"2026-02-16T14:42:31.384Z Environment is development"}
+{"level":"info","message":"2026-02-16T14:46:10.265Z Application starting..."}
+{"level":"info","message":"2026-02-16T14:46:10.269Z Environment is development"}
+{"level":"info","message":"2026-02-17T09:38:04.100Z Application starting..."}
+{"level":"info","message":"2026-02-17T09:38:04.107Z Environment is development"}
+{"level":"info","message":"2026-02-17T09:47:10.814Z Application starting..."}
+{"level":"info","message":"2026-02-17T09:47:10.821Z Environment is development"}
