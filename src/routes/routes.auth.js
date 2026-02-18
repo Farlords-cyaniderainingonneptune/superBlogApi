@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as authController from '../controllers/controllers.auth.js';
-import models from '../middlewares/models.js';
-import schema from '../schemas/schema.auth.js';
+// import models from '../middlewares/models.js';
+// import schema from '../schemas/schema.auth.js';
 import * as passwordController from '../controllers/controllers.password.js';
 const router = Router();
 

@@ -1,3 +1,4 @@
+
 ALTER TABLE blog_users
 ADD COLUMN IF NOT EXISTS user_type user_types DEFAULT'user';
 

@@ -1,5 +1,5 @@
 import transporter from '../config/email/index.js';
-import redisClient from '../config/redis/index.js';
+// import redisClient from '../config/redis/index.js';
 // import {Worker} from 'bull';
 
 // const connection = new redisClient();

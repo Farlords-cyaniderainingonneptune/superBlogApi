@@ -76,4 +76,4 @@ CREATE TABLE IF NOT EXISTS blog_users (
 
 INSERT INTO authors (name, email, image_url, bio)
 VALUES 
-	('Blog Admin', 'newblogadmin@gmail.com', 'https://images.dojah.io/selfie_sample_image_1720624219.jpg', 'Blog admin author profile', 'Admin');
+	('Blog Admin', 'newblogadmin@gmail.com', 'https://images.dojah.io/selfie_sample_image_1720624219.jpg', 'Blog admin author profile');

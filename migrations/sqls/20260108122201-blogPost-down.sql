@@ -1,7 +1,6 @@
 /* Replace with your SQL commands */
 DROP TYPE IF EXISTS blog_post_status CASCADE;
 DROP TYPE IF EXISTS blog_user_status CASCADE;
-
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS blog_posts CASCADE;
 DROP TABLE IF EXISTS authors CASCADE;

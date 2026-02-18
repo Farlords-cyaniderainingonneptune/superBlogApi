@@ -1,3 +1,4 @@
+CREATE TYPE user_types AS ENUM ('admin', 'user');
 ALTER TABLE blog_users
 ADD COLUMN IF NOT EXISTS user_type user_types DEFAULT'user';
 INSERT INTO blog_users(

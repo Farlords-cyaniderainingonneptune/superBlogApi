@@ -1,1 +1,1 @@
-DROP TYPE IF EXISTS blog_user_roles CASCADE;
+

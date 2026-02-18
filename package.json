@@ -7,8 +7,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "pretest": "cross-env NODE_ENV=test npm run lint && cross-env NODE_ENV=test npm run seed:reset:test && cross-env NODE_ENV=test npm run migrate:reset:test && cross-env NODE_ENV=test npm run migrate:up:test && cross-env NODE_ENV=test npm run seed:up:test", 
+    "pretest": "cross-env NODE_ENV=test npm run migrate:reset:test && cross-env NODE_ENV=test npm run migrate:up:test", 
     "test": "cross-env NODE_ENV=test debug=true nyc --reporter=lcov --reporter=text --reporter=text-summary mocha --timeout 120000 --require @babel/register test/index.js --exit", 
+    "migrate:up": "db-migrate up --config database.json",
+    "migrate:down": "db-migrate down --config database.json",
+    "migrate:reset": "db-migrate reset --config database.json",
+    "migrate:up:test": "db-migrate up --config database.json -e test",
+    "migrate:reset:test": "db-migrate reset --config database.json -e test", 
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "seedAdmin": "node src/seedAdmin.js",
@@ -38,12 +43,18 @@
     "redis": "^5.10.0",
     "uuid": "^13.0.0",
     "winston": "^3.19.0"
-   
+    
   },
   "devDependencies": {
      "chai": "^4.3.8",
     "chai-http": "^4.4.0",
     "cross-env": "^7.0.3",
-    "mocha": "^10.2.0" 
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "@babel/cli": "^7.22.15",
+    "@babel/core": "^7.22.20",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.22.20",
+    "@babel/register": "^7.22.15"
 } 
 }
