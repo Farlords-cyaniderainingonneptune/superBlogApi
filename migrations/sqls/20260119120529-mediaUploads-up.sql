@@ -14,3 +14,4 @@ CREATE TABLE IF NOT EXISTS media_uploads(
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+

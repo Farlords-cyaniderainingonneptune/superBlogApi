@@ -18,29 +18,29 @@ export const fetchPosts = async(req, res) => {
     });
 };
 const { offset, limit } = Helpers.paginationOffsetLimit(query);
-    const cacheKey = 'posts:all';
-    const cachedPosts = await redisClient.get(cacheKey);
-    if (cachedPosts){
-        return res.json({
-            source:'cache',
-            data:JSON.parse(cachedPosts),
-            count:cachedPosts.length
-        });
-    }
-    const keys = await redisClient.keys('posts:all');
-    if (keys.length> 0){
-        await redisClient.del(keys);
-    }
+    // const cacheKey = 'posts:all';
+    // const cachedPosts = await redisClient.get(cacheKey);
+    // if (cachedPosts){
+    //     return res.json({
+    //         source:'cache',
+    //         data:JSON.parse(cachedPosts),
+    //         count:cachedPosts.length
+    //     });
+    // }
+    // const keys = await redisClient.keys('posts:all');
+    // if (keys.length> 0){
+    //     await redisClient.del(keys);
+    // }
   const posts = await postModel.fetchPosts(offset, limit);
   const totalPosts = await postModel.fetchPostsCount();
 
   const totalPostsCount = parseInt(totalPosts.count);
   const totalPages = Helpers.paginationTotalPages(totalPostsCount, limit);
-    await redisClient.setEx(
-        cacheKey,
-        3600,
-        JSON.stringify(posts)
-    );
+    // await redisClient.setEx(
+    //     cacheKey,
+    //     3600,
+    //     JSON.stringify(posts)
+    // );
   return res.status(200).json({
     status: 'success',
     message: 'Blog posts retrieved successfully',

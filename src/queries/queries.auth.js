@@ -26,6 +26,6 @@
     userPassword: 'SELECT id, user_id, password FROM blog_users WHERE user_id = $1',
     updateUserOnLogin: 'UPDATE blog_users SET updated_at = NOW(), last_login_at = NOW() WHERE user_id = $1',
     updateUserPassword:`
-    UPDATE blog_users 
+    UPDATE blog_users
     SET updated_at = NOW(), status = 'active', password= $3 WHERE email = $1 RETURNING id, user_id, email, password, first_name`
 }
